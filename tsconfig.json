@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "target": "ESNext",
+    "module": "CommonJS",
+    "esModuleInterop": true,
+    "baseUrl": ".",
+  },
+  "lib": ["es2020"],
+  "include": ["src/**/*", "socket", "custom.d.ts", "test"],
+  "exclude": ["node_modules","**/*.spec.ts"]
+}
