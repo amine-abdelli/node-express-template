@@ -1,18 +1,20 @@
 import { Response } from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import { COOKIE_SETTINGS, HttpError, emailPolicy } from '../utils';
-import { getUserByEmailRepository, getUserByUsernameRepository, updateUserByIdRepository } from '../repositories';
+
 import { log } from 'src/log';
-import { formatEmail } from 'src/utils/email.utils';
-import { User } from '@prisma/client';
+import { UserModel } from 'src/model/user.model';
+import { getUserByEmailRepository, getUserByUsernameRepository, updateUserByIdRepository } from '../repositories';
+import {
+  COOKIE_SETTINGS, HttpError, emailPolicy, formatEmail,
+} from '../utils';
 
 const jwtConfig = {
   expiresIn: '7d',
   algorithm: 'HS512',
 } as jwt.SignOptions;
 
-export async function loginService(userCredentials: Partial<User>, res: Response) {
+export async function loginService(userCredentials: UserModel, res: Response) {
   const { email: emailOrUsername, password } = userCredentials;
 
   log.info('Logging user : ', { user: emailOrUsername });

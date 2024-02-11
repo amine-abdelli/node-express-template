@@ -1,12 +1,13 @@
 import { User } from '@prisma/client';
 
+import { UserModel } from 'src/model';
 import { prisma } from '../client';
 
 /**
- * Create user and its associated settings and palmares.
- * @param data IRegister
+ * Create one user
+ * @param data UserModel
  */
-export function createUserRepository(data: Partial<User>): Promise<User> {
+export function createUserRepository(data: UserModel): Promise<User> {
   return prisma.user.create({
     data: {
       email: data.email,
@@ -17,7 +18,7 @@ export function createUserRepository(data: Partial<User>): Promise<User> {
 }
 
 /**
- * Deletes user and its associated settings and palmares.
+ * Delete one user.
  * @param userId string
  */
 export function deleteUserRepository(userId: string) {
@@ -25,7 +26,7 @@ export function deleteUserRepository(userId: string) {
 }
 
 /**
- * Get user by ID.
+ * Get one user by ID.
  * @param userId string
  * @returns a one user
  */
@@ -38,7 +39,7 @@ export function getUserByIdRepository(userId: string): Promise<User | null> {
 }
 
 /**
- * Get user by Email.
+ * Get one user by Email.
  * @param email string
  * @returns one user
  */

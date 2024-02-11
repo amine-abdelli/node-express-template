@@ -29,8 +29,10 @@ function authMiddleware(req: Request, res: Response, next: NextFunction) {
 
   return null;
 }
-
-// eslint-disable-next-line max-len
+/**
+ * A helper function to attach the authMiddleware to a request handler
+ * This is useful when you want to protect a route with authentication
+ */
 const withAuth = (handler: RequestHandler): RequestHandler[] => [authMiddleware, handler];
 
 export { authMiddleware, withAuth };

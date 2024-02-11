@@ -10,7 +10,7 @@ const router = express.Router();
  */
 export async function login(req: Request, res: Response, next: NextFunction) {
   try {
-    return await loginService(req.body, res);
+    return loginService(req.body, res);
   } catch (error) {
     return next(error);
   }

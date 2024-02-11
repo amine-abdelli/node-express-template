@@ -7,6 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// This model is used to store the user's data
 model User {
   id                   String            @id @default(uuid())
   username             String            @unique

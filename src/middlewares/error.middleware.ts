@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import { HttpError } from '../utils';
 import { log } from 'src/log';
+import { HttpError } from 'src/utils';
 
 export function errorHandler(err: Error, _: Request, res: Response, next: NextFunction) {
   // default HTTP status code and error message
@@ -12,7 +12,9 @@ export function errorHandler(err: Error, _: Request, res: Response, next: NextFu
     httpStatusCode = err.httpStatusCode;
     message = err.message;
   }
+
   let stackTrace;
+
   if (process.env.NODE_ENV !== 'production') {
     stackTrace = err.stack;
     if (typeof err === 'string') {

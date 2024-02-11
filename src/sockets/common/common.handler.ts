@@ -1,5 +1,5 @@
-import { Socket } from "socket.io";
-import { SocketCommonEventsEnum } from "./common.type";
+import { Socket } from 'socket.io';
+import { SocketCommonEventsEnum } from './common.type';
 
 /**
  * Emit events to all connected sockets

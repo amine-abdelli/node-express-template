@@ -1,8 +1,82 @@
 {
+  "root": true,
+  "settings": {
+    "import/resolver": {
+      "typescript": {},
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  },
+  "env": {
+    "es2022": true, // Updated to a more recent ECMAScript version
+    "node": true,
+    "jest/globals": true
+  },
   "extends": [
-    "../../.eslintrc.json"
+    "airbnb-base",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2022, // Updated to match the environment's ECMAScript version
+    "sourceType": "module",
+    "warnOnUnsupportedTypeScriptVersion": false
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "eslint-plugin-import",
+    "jest"
   ],
   "rules": {
-    "react/function-component-definition": "off"
+    "jsx-a11y/click-events-have-key-events": "off",
+    "no-restricted-syntax": "off",
+    "linebreak-style": 0,
+    "camelcase": 0,
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "off", // Consider setting to "off" if not using JSX
+        "ts": "never",
+        "tsx": "never"
+      }
+    ],
+    "import/prefer-default-export": [
+      0
+    ],
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": [
+      "error"
+    ],
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "error"
+    ],
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": [
+          "**/*.spec.ts",
+          "**/mock.ts"
+        ]
+      }
+    ],
+    "@typescript-eslint/type-annotation-spacing": [
+      1,
+      {
+        "before": false,
+        "after": true,
+        "overrides": {
+          "arrow": {
+            "before": true,
+            "after": true
+          }
+        }
+      }
+    ]
   }
 }

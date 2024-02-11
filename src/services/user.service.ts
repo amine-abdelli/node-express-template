@@ -1,20 +1,22 @@
-/* eslint-disable indent */
-/* eslint-disable consistent-return */
-
 import { User } from '@prisma/client';
 import { Request } from 'express';
 import bcrypt from 'bcryptjs';
-import { HttpError, emailPolicy, passwordPolicy, usernamePolicy } from '../utils';
-import {
-  createUserRepository, deleteUserRepository, getUserByEmailRepository, getUserByIdRepository, getUserByUsernameRepository, updateUserByIdRepository,
-} from '../repositories';
 import { log } from 'src/log';
 import { formatEmail } from 'src/utils/email.utils';
+import { UserModel } from 'src/model';
+import {
+  HttpError, emailPolicy, passwordPolicy, usernamePolicy,
+} from '../utils';
+import {
+  createUserRepository, deleteUserRepository, getUserByEmailRepository,
+  getUserByIdRepository, getUserByUsernameRepository, updateUserByIdRepository,
+} from '../repositories';
 
 export async function createUserService(
-  { username, email, password }: Partial<User>,
+  { username, email, password }: UserModel,
 ): Promise<User> {
   log.info('Creating user with data:', { email });
+
   if (!emailPolicy.test(email)
     || !passwordPolicy.test(password)
     || !usernamePolicy.test(username)) {
@@ -26,11 +28,15 @@ export async function createUserService(
   if (user) {
     throw new HttpError(403, 'This email is already used');
   }
+
   const userByUsername = await getUserByUsernameRepository(username);
+
   if (userByUsername) {
     throw new HttpError(403, 'This username is already taken');
   }
+
   const hashedPassword = await bcrypt.hash(password, 10);
+
   const createdUser = await createUserRepository({
     username,
     email: formatEmail(email),
@@ -42,6 +48,7 @@ export async function createUserService(
   }
 
   log.info('User created successfully:', { email: createdUser.email });
+
   return createdUser;
 }
 
@@ -73,34 +80,43 @@ export async function deleteUserService(req: Request) {
 
 export async function getUserByIdService(req: Request): Promise<User> {
   const { userId } = req;
+  log.info('Getting one user by ID: ', { userId });
   const username = req.query.username as string;
   const isVisitingOwnProfile = !username;
-  log.info('Getting user by ID: ', { userId });
+
   if (!userId) {
     throw new HttpError(400, 'Missing user ID');
   }
+
   let user: User | null;
+
   if (isVisitingOwnProfile) {
     user = await getUserByIdRepository(userId);
   } else {
     user = await getUserByUsernameRepository(username);
   }
+
   if (!user) {
     throw new HttpError(404, 'User not found');
   }
+
   log.info('User data retrieved successfully:', { email: user.email });
   return user;
 }
 
 export async function getUserByEmailService(email: string): Promise<User | null> {
   log.info('Getting user by email: ', { email });
+
   if (!emailPolicy.test(email)) {
     throw new HttpError(400, 'Invalid email format or parameter missing');
   }
+
   const user = await getUserByEmailRepository(email);
+
   if (!user) {
     throw new HttpError(404, 'User not found');
   }
+
   log.info('User data retrieved successfully:', { email: user.email });
   return user;
 }
@@ -108,17 +124,23 @@ export async function getUserByEmailService(email: string): Promise<User | null>
 export async function updateUserByIdService(userId: string, data: User):
   Promise<User> {
   log.info('Updating user by ID: ', userId);
+
   if (!userId) {
     throw new HttpError(400, 'Missing user ID');
   }
+
   const user = await getUserByIdRepository(userId);
+
   if (!user) {
     throw new HttpError(404, 'User not found');
   }
+
   const updatedUser = await updateUserByIdRepository(user.id, data);
+
   if (!updatedUser) {
     throw new HttpError(500, 'An error occurred while updating user');
   }
+
   log.info('User updated successfully:', { email: updatedUser?.email });
   return updatedUser;
 }
@@ -145,6 +167,7 @@ export async function updatePasswordService(req: Request) {
   }
 
   const hashedPassword = await bcrypt.hash(newPassword, 10);
+
   const updatedUser = await updateUserByIdRepository(user.id, { password: hashedPassword });
 
   log.info('Password updated successfully:', { email: updatedUser?.email });
