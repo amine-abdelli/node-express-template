@@ -9,10 +9,10 @@ const router = express.Router();
 
 /**
  * Create a user and its related default settings and palmares
- * @route /create
+ * @path /user/create
  * @method POST
  */
-export async function createUser(req: Request, res: Response, next: NextFunction) {
+export async function createOneUser(req: Request, res: Response, next: NextFunction) {
   try {
     const user = await createUserService(req.body);
     return res.status(200).json({ user });
@@ -23,7 +23,7 @@ export async function createUser(req: Request, res: Response, next: NextFunction
 
 /**
  * Update one user
- * @route /update
+ * @path /user/update
  * @method PUT
  */
 export async function updateOneUser(req: Request, res: Response, next: NextFunction) {
@@ -37,10 +37,10 @@ export async function updateOneUser(req: Request, res: Response, next: NextFunct
 
 /**
  * Get user's data
- * @route /me
+ * @path /user/me
  * @method GET
  */
-export async function getUserData(req: Request, res: Response, next: NextFunction) {
+export async function getOneUser(req: Request, res: Response, next: NextFunction) {
   try {
     const { password, ...userRest } = await getUserByIdService(req);
     return res.status(200).json(userRest);
@@ -51,7 +51,7 @@ export async function getUserData(req: Request, res: Response, next: NextFunctio
 
 /**
  * Delete user and its related settings and palmares
- * @route /delete
+ * @path /user/delete
  * @method DELETE
  */
 export async function deleteOneUser(req: Request, res: Response, next: NextFunction) {
@@ -64,11 +64,9 @@ export async function deleteOneUser(req: Request, res: Response, next: NextFunct
 }
 
 /**
- *
- * @param req
- * @param res
- * @param next
- * @returns
+ * Update user's password
+ * @path /user/update-password
+ * @method PUT
  */
 export async function updateUserPassword(req: Request, res: Response, next: NextFunction) {
   try {

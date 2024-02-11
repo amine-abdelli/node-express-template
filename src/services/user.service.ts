@@ -5,22 +5,21 @@ import { log } from 'src/log';
 import { formatEmail } from 'src/utils/email.utils';
 import { UserModel } from 'src/model';
 import {
-  HttpError, emailPolicy, passwordPolicy, usernamePolicy,
+  HttpError, emailPolicy, passwordPolicy,
 } from '../utils';
 import {
   createUserRepository, deleteUserRepository, getUserByEmailRepository,
-  getUserByIdRepository, getUserByUsernameRepository, updateUserByIdRepository,
+  getUserByIdRepository, updateUserByIdRepository,
 } from '../repositories';
 
 export async function createUserService(
-  { username, email, password }: UserModel,
+  { email, password }: UserModel,
 ): Promise<User> {
   log.info('Creating user with data:', { email });
 
   if (!emailPolicy.test(email)
-    || !passwordPolicy.test(password)
-    || !usernamePolicy.test(username)) {
-    throw new HttpError(400, 'Invalid email, username or password');
+    || !passwordPolicy.test(password)) {
+    throw new HttpError(400, 'Invalid email or password');
   }
 
   const user = await getUserByEmailRepository(email);
@@ -28,17 +27,9 @@ export async function createUserService(
   if (user) {
     throw new HttpError(403, 'This email is already used');
   }
-
-  const userByUsername = await getUserByUsernameRepository(username);
-
-  if (userByUsername) {
-    throw new HttpError(403, 'This username is already taken');
-  }
-
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const createdUser = await createUserRepository({
-    username,
     email: formatEmail(email),
     password: hashedPassword,
   });
@@ -60,6 +51,7 @@ export async function deleteUserService(req: Request) {
   if (!password) {
     throw new HttpError(400, 'Email or password parameter missing');
   }
+
   const userToDelete = await getUserByIdRepository(req.userId);
 
   if (!userToDelete) {
@@ -75,26 +67,20 @@ export async function deleteUserService(req: Request) {
   const deleteResponse = await deleteUserRepository(userToDelete.id);
 
   log.info('User deleted successfully:', { userId: userToDelete.id });
+
   return deleteResponse;
 }
 
 export async function getUserByIdService(req: Request): Promise<User> {
   const { userId } = req;
+
   log.info('Getting one user by ID: ', { userId });
-  const username = req.query.username as string;
-  const isVisitingOwnProfile = !username;
 
   if (!userId) {
     throw new HttpError(400, 'Missing user ID');
   }
 
-  let user: User | null;
-
-  if (isVisitingOwnProfile) {
-    user = await getUserByIdRepository(userId);
-  } else {
-    user = await getUserByUsernameRepository(username);
-  }
+  const user: User | null = await getUserByIdRepository(userId);
 
   if (!user) {
     throw new HttpError(404, 'User not found');
@@ -118,6 +104,7 @@ export async function getUserByEmailService(email: string): Promise<User | null>
   }
 
   log.info('User data retrieved successfully:', { email: user.email });
+
   return user;
 }
 
@@ -150,6 +137,10 @@ export async function updatePasswordService(req: Request) {
 
   const { oldPassword, newPassword } = req.body;
 
+  if (!passwordPolicy.test(newPassword)) {
+    throw new HttpError(400, 'Password must contain at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character');
+  }
+
   if (!oldPassword || !newPassword) {
     throw new HttpError(400, 'Missing old or new password');
   }
@@ -171,12 +162,6 @@ export async function updatePasswordService(req: Request) {
   const updatedUser = await updateUserByIdRepository(user.id, { password: hashedPassword });
 
   log.info('Password updated successfully:', { email: updatedUser?.email });
+
   return updatedUser;
 }
-
-export const isUsernameAvailableService = async (username: string): Promise<boolean> => {
-  log.info('Checking if username is available', { username });
-  const user = await getUserByUsernameRepository(username);
-  log.info('Username availability checked successfully:', { isAvailable: !user });
-  return !user;
-};

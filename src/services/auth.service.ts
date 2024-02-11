@@ -4,10 +4,8 @@ import bcrypt from 'bcryptjs';
 
 import { log } from 'src/log';
 import { UserModel } from 'src/model/user.model';
-import { getUserByEmailRepository, getUserByUsernameRepository, updateUserByIdRepository } from '../repositories';
-import {
-  COOKIE_SETTINGS, HttpError, emailPolicy, formatEmail,
-} from '../utils';
+import { getUserByEmailRepository, updateUserByIdRepository } from 'src/repositories';
+import { COOKIE_SETTINGS, HttpError } from 'src/utils';
 
 const jwtConfig = {
   expiresIn: '7d',
@@ -15,23 +13,15 @@ const jwtConfig = {
 } as jwt.SignOptions;
 
 export async function loginService(userCredentials: UserModel, res: Response) {
-  const { email: emailOrUsername, password } = userCredentials;
+  const { email, password } = userCredentials;
 
-  log.info('Logging user : ', { user: emailOrUsername });
+  log.info('Logging user : ', { email });
 
-  const isEmail = emailPolicy.test(emailOrUsername || '');
-
-  if ((!emailOrUsername) || !password) {
+  if ((!email) || !password) {
     throw new HttpError(400, 'Missing username, email or password');
   }
 
-  let user;
-
-  if (emailOrUsername && isEmail) {
-    user = await getUserByEmailRepository(formatEmail(emailOrUsername));
-  } else if (emailOrUsername) {
-    user = await getUserByUsernameRepository(emailOrUsername);
-  }
+  const user = await getUserByEmailRepository(email);
 
   const isPasswordValid = await bcrypt.compare(password, user?.password || '');
 
@@ -53,7 +43,7 @@ export async function loginService(userCredentials: UserModel, res: Response) {
 
   await updateUserByIdRepository(user.id, { last_activity: new Date() });
 
-  log.info('User successfully logged in : ', { user: emailOrUsername });
+  log.info('User successfully logged in : ', { email });
 
   return res.status(200).cookie('session_id', token, COOKIE_SETTINGS).send({ message: 'User logged in !' });
 }

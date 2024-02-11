@@ -4,24 +4,26 @@ import { Server, Socket } from 'socket.io';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import rateLimit from 'express-rate-limit';
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUI from 'swagger-ui-express';
 import { handleSocketConnection } from './sockets/socket';
 import Routers from './routers';
 import { errorHandler } from './middlewares';
 import { HttpError } from './utils';
 import { log } from './log';
+import { swaggerOptions } from './utils/openapi.utils';
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-dotenv.config();
+dotenv.config({ path: './.env.local' });
 
 app.use(express.json());
 
 const whitelist = [
-  'http://localhost:5173',
-  'http://127.0.0.1:5173',
-  process.env.WEB_FRONTEND_URL,
+  process.env.API_URL || 'http://localhost:4000',
+  process.env.WEB_FRONTEND_URL || 'http://localhost:3000',
   process.env.MOBILE_FRONTEND_URL,
 ];
 
@@ -37,8 +39,10 @@ const corsOptions = {
   allowedHeaders: ['Authorization', 'Content-Type'],
 };
 
-// This is a very basic rate limiter to avoid extreme attack usecases
-// In the future, setup a rate limit depending on query complexity
+/**
+ * This is a very basic rate limiter to avoid extreme attack usecases
+ * but you can setup a rate limit depending on query complexity
+ */
 const limiter = rateLimit({
   windowMs: 10 * 1000, // ten seconds in milliseconds
   max: 100, // limit each IP to 100 req / 10sec
@@ -67,6 +71,13 @@ Routers.map(({ route, router }) => app.use(route, router));
  * Error handling layer
  */
 app.use(errorHandler);
+
+/**
+ * Basic swagger setup
+ * Available by default at localhost:4000/api-docs
+ * @see https://www.npmjs.com/package/swagger-ui-express
+ */
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerJSDoc(swaggerOptions)));
 
 /**
  * Socket entry point

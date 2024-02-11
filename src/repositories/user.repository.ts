@@ -11,7 +11,6 @@ export function createUserRepository(data: UserModel): Promise<User> {
   return prisma.user.create({
     data: {
       email: data.email,
-      username: data.username,
       password: data.password,
     },
   });
@@ -63,18 +62,5 @@ export function updateUserByIdRepository(userId: string, data: Partial<User>) {
       id: userId,
     },
     data,
-  });
-}
-
-/**
- * Get one user by its username.
- * @param username string
- * @returns one user
- */
-export function getUserByUsernameRepository(username: string): Promise<User | null> {
-  return prisma.user.findUnique({
-    where: {
-      username,
-    },
   });
 }

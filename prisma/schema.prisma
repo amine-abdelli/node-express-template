@@ -10,7 +10,6 @@ datasource db {
 // This model is used to store the user's data
 model User {
   id                   String            @id @default(uuid())
-  username             String            @unique
   email                String            @unique
   password             String
   last_activity        DateTime?
