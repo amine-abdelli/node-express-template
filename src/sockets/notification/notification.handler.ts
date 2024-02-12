@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io';
+import { IO } from 'src/sockets/types';
 import { SocketNotificationEventsEnum } from './notification.type';
-import { IO } from '../types';
 
 /**
  * Emit notification events to a specific room

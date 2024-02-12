@@ -4,9 +4,9 @@ import validateSchema from 'src/utils/schema.utils';
 import {
   CreateUserSchema, DeleteUserSchema, UpdatePasswordSchema, UpdateUserSchema,
 } from 'src/schemas';
-import { withAuth } from '../middlewares/auth.middleware';
-import * as UserController from '../controllers/user.controller';
-import { endpoints } from './routes';
+import { withAuth } from 'src/middlewares/auth.middleware';
+import * as UserController from 'src/controllers/user.controller';
+import { endpoints } from 'src/routers/routes';
 
 const router = express.Router();
 

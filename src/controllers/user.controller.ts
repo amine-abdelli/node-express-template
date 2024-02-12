@@ -2,11 +2,10 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { omit } from 'lodash';
 
-import { LoginSchema } from 'src/schemas';
 import {
   createUserService, deleteUserService, getUserByIdService,
   updatePasswordService, updateUserByIdService,
-} from '../services';
+} from 'src/services';
 
 const router = express.Router();
 

@@ -1,9 +1,9 @@
 import express from 'express';
 import validateSchema from 'src/utils/schema.utils';
 import { LoginSchema } from 'src/schemas';
-import { withAuth } from '../middlewares/auth.middleware';
-import * as AuthController from '../controllers/auth.controller';
-import { endpoints } from './routes';
+import { withAuth } from 'src/middlewares/auth.middleware';
+import * as AuthController from 'src/controllers/auth.controller';
+import { endpoints } from 'src/routers/routes';
 
 const router = express.Router();
 

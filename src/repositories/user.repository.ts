@@ -1,7 +1,7 @@
 import { User } from '@prisma/client';
 
 import { UserModel } from 'src/model';
-import { prisma } from '../client';
+import { prisma } from 'src/client';
 
 /**
  * Create one user

@@ -1,9 +1,9 @@
 /* eslint-disable max-len */
 import { Socket } from 'socket.io';
 
-import { SocketCommonEventsEnum } from './common.type';
-import { healthCheck } from './common.handler';
-import { IO } from '../types';
+import { IO } from 'src/sockets/types';
+import { SocketCommonEventsEnum } from 'src/sockets/common/common.type';
+import { healthCheck } from 'src/sockets/common/common.handler';
 
 /**
  * Map notification events to their respective handlers

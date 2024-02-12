@@ -6,11 +6,11 @@ import { formatEmail } from 'src/utils/email.utils';
 import { UserModel } from 'src/model';
 import {
   HttpError, emailPolicy, passwordPolicy,
-} from '../utils';
+} from 'src/utils';
 import {
   createUserRepository, deleteUserRepository, getUserByEmailRepository,
   getUserByIdRepository, updateUserByIdRepository,
-} from '../repositories';
+} from 'src/repositories';
 
 export async function createUserService(
   { email, password }: UserModel,
