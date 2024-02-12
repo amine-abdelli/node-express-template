@@ -1,11 +1,10 @@
 import { Response } from 'express';
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
 
 import { log } from 'src/log';
 import { UserModel } from 'src/model/user.model';
 import { getUserByEmailRepository, updateUserByIdRepository } from 'src/repositories';
-import { COOKIE_SETTINGS, HttpError } from 'src/utils';
+import { COOKIE_SETTINGS, HttpError, validatePassword } from 'src/utils';
 
 const jwtConfig = {
   expiresIn: '7d',
@@ -17,13 +16,13 @@ export async function loginService(userCredentials: UserModel, res: Response) {
 
   log.info('Logging user : ', { email });
 
-  if ((!email) || !password) {
+  if (!email || !password) {
     throw new HttpError(400, 'Missing username, email or password');
   }
 
   const user = await getUserByEmailRepository(email);
 
-  const isPasswordValid = await bcrypt.compare(password, user?.password || '');
+  const isPasswordValid = await validatePassword(password, user?.password || '');
 
   if (!user || !isPasswordValid) {
     throw new HttpError(401, 'Incorrect email or password');

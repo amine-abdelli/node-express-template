@@ -1,4 +1,6 @@
 import express from 'express';
+import validateSchema from 'src/utils/schema.utils';
+import { LoginSchema } from 'src/schemas';
 import { withAuth } from '../middlewares/auth.middleware';
 import * as AuthController from '../controllers/auth.controller';
 import { endpoints } from './routes';
@@ -50,7 +52,7 @@ const router = express.Router();
  *       401:
  *         description: Unauthorized. Incorrect email or password.
  */
-router.post(endpoints.auth.login, AuthController.login);
+router.post(endpoints.auth.login, validateSchema(LoginSchema), AuthController.login);
 
 /**
  * @openapi

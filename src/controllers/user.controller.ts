@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import express, { Request, Response, NextFunction } from 'express';
+import { omit } from 'lodash';
+
+import { LoginSchema } from 'src/schemas';
 import {
   createUserService, deleteUserService, getUserByIdService,
   updatePasswordService, updateUserByIdService,
@@ -28,8 +31,8 @@ export async function createOneUser(req: Request, res: Response, next: NextFunct
  */
 export async function updateOneUser(req: Request, res: Response, next: NextFunction) {
   try {
-    const { password, ...userRest } = await updateUserByIdService(req.userId, req.body);
-    return res.status(200).json({ user: userRest });
+    const user = await updateUserByIdService(req.userId, req.body);
+    return res.status(200).json({ user: omit(user, 'password') });
   } catch (error) {
     return next(error);
   }
@@ -42,8 +45,8 @@ export async function updateOneUser(req: Request, res: Response, next: NextFunct
  */
 export async function getOneUser(req: Request, res: Response, next: NextFunction) {
   try {
-    const { password, ...userRest } = await getUserByIdService(req);
-    return res.status(200).json(userRest);
+    const user = await getUserByIdService(req);
+    return res.status(200).json(omit(user, 'password'));
   } catch (error) {
     return next(error);
   }
@@ -70,8 +73,8 @@ export async function deleteOneUser(req: Request, res: Response, next: NextFunct
  */
 export async function updateUserPassword(req: Request, res: Response, next: NextFunction) {
   try {
-    const { password, ...userRest } = await updatePasswordService(req);
-    return res.status(200).json(userRest);
+    const user = await updatePasswordService(req);
+    return res.status(200).json(omit(user, 'password'));
   } catch (error) {
     return next(error);
   }

@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { CookieOptions } from 'express';
+import bcrypt from 'bcryptjs';
 
 export function isTokenExpired(expiresIn: number, emittedAt: number) {
   return Date.now() > ((expiresIn * 1000) + emittedAt);
@@ -7,6 +8,10 @@ export function isTokenExpired(expiresIn: number, emittedAt: number) {
 
 export function getTokenPayload(token: string) {
   return jwt.verify(token, process.env.JWT_SECRET || '');
+}
+
+export function validatePassword(password: string, currentPassword: string) {
+  return bcrypt.compare(password, currentPassword);
 }
 
 export const COOKIE_SETTINGS: CookieOptions = {
