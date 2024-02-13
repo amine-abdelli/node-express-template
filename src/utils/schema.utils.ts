@@ -9,7 +9,7 @@ import { AnyZodObject } from 'zod';
  * @param schema - The schema to validate against.
  * @returns A middleware function that performs the validation.
  */
-const validateSchema = (
+export const validateSchema = (
   schema: AnyZodObject,
 ) => (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -32,5 +32,3 @@ const validateSchema = (
     });
   }
 };
-
-export default validateSchema;
