@@ -2,9 +2,15 @@ TODO:
 - Stripe
 - Next Auth || SSO Google / Facebook / Apple
 - Firebase storage
-- Readme
+- Readme (precise to change mails in version.yml)
 - Mailing service
-- Make sockets available everywhere
-- Double check zod error handling
-- Revoir logger
+- tests : controllers, service, utils
 - Minimal CI (version upgrade / lint / build / test)
+
+- Prisma : Database querying / Migrations
+- Logger
+- REST
+- OpenAPI - SWAGGER
+- ZOD
+- Socket
+- linter
