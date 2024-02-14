@@ -10,7 +10,7 @@ on:
       - main
 
 jobs:
-  update_version:
+  pull_request_checks:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
