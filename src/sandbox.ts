@@ -1,4 +1,4 @@
-// import { prisma } from './src/client';
+// import { prisma } from './client';
 
 /**
  * This is a sandbox file to test the prisma client or any other code you want to test in isolation.

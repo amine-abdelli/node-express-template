@@ -1,12 +1,12 @@
 import express from 'express';
 import http from 'http';
-import { Server, Socket } from 'socket.io';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import rateLimit from 'express-rate-limit';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUI from 'swagger-ui-express';
-import { handleSocketConnection } from './sockets/socket';
+
+import { initSocket } from './sockets/socket-manager';
 import Routers from './routers';
 import { errorHandler } from './middlewares';
 import { HttpError } from './utils';
@@ -15,9 +15,8 @@ import { swaggerOptions } from './utils/openapi.utils';
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
 
-dotenv.config({ path: './.env.local' });
+dotenv.config();
 
 app.use(express.json());
 
@@ -80,9 +79,9 @@ app.use(errorHandler);
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerJSDoc(swaggerOptions)));
 
 /**
- * Socket entry point
+ * Socket.io initialization
  */
-io.on('connection', (socket: Socket) => handleSocketConnection(socket, io));
+initSocket(server);
 
 const PORT = process.env.PORT || 4000;
 
