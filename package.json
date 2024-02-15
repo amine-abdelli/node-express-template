@@ -1,6 +1,6 @@
 {
   "name": "node-express-template",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "main": "src/server.ts",
   "author": "Amine Abdelli <amine.abdelli@outlook.fr>",
