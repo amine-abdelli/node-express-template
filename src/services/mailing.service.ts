@@ -1,10 +1,24 @@
 import Mailjet from 'node-mailjet';
 
+/**
+ * Here's the minimal setup to send emails using Mailjet.
+ * Useful for account confirmation, reset password, welcoming users etc...
+ * You'll need to create an account here https://app.mailjet.com/signup
+ * Generate API and Secret keys and add them to your .env file
+ * Refer to the official documentation for more details
+ * @documentation https://github.com/mailjet/mailjet-apiv3-nodejs
+ */
+
 const mailjet = new Mailjet({
   apiKey: process.env.MAILJET_API_KEY,
   apiSecret: process.env.MAILJET_SECRET_KEY,
 });
 
+/**
+ * Send a welcome email to the user
+ * @param toEmail - the email of the user
+ * @param toName - the name of the user
+ */
 export async function sendWelcomeEmail(toEmail: string, toName: string) {
   try {
     await mailjet.post('send', { version: 'v3.1' }).request({
