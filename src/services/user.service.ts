@@ -11,6 +11,7 @@ import {
   createUserRepository, deleteUserRepository, getUserByEmailRepository,
   getUserByIdRepository, updateUserByIdRepository,
 } from 'src/repositories';
+import { sendWelcomeEmail } from './mailing.service';
 
 export async function createUserService(
   { email, password }: UserModel,
@@ -37,6 +38,9 @@ export async function createUserService(
   if (!createdUser) {
     throw new HttpError(500, 'An error occurred while creating a user');
   }
+
+  // Send welcome email on user creation success
+  await sendWelcomeEmail(createdUser.email, createdUser.email.split('@')[0]);
 
   log.info('User created successfully:', { email: createdUser.email });
 
