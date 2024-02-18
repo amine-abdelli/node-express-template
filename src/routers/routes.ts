@@ -10,9 +10,11 @@ export const endpoints = Object.freeze({
     login: '/login',
     logout: '/logout',
   },
+  'health-check': '/',
 });
 
 export const routes = Object.freeze({
   user: '/user',
   auth: '/auth',
+  health: '/health-check',
 });

@@ -45,10 +45,8 @@ const corsOptions = {
  */
 const limiter = rateLimit({
   windowMs: 10 * 1000, // ten seconds in milliseconds
-  max: 100, // limit each IP to 100 req / 10sec
-  onLimitReached: (req: express.Request) => {
-    log.warn('Rate limit exceeded', { ip: req.ip || 'unknown' });
-  },
+  max: 20, // limit each IP to 20 req / 10sec
+  handler: (_, res) => res.status(429).json({ message: 'Too many requests, please try again later.', status: 429 }),
   message: { message: 'Too many requests, please try again later.', status: 429 },
 });
 
