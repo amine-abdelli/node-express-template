@@ -1,3 +1,9 @@
+export const routes = Object.freeze({
+  user: '/user',
+  auth: '/auth',
+  ping: '/ping',
+});
+
 export const endpoints = Object.freeze({
   user: {
     me: '/me',
@@ -10,11 +16,5 @@ export const endpoints = Object.freeze({
     login: '/login',
     logout: '/logout',
   },
-  'health-check': '/',
-});
-
-export const routes = Object.freeze({
-  user: '/user',
-  auth: '/auth',
-  health: '/health-check',
+  ping: '/ping',
 });

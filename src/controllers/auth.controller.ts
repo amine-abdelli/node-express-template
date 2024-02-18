@@ -5,7 +5,7 @@ const router = express.Router();
 
 /**
  * Login
- * @route /login
+ * @path /login
  * @method POST
  */
 export function login(req: Request, res: Response, next: NextFunction) {
@@ -18,7 +18,7 @@ export function login(req: Request, res: Response, next: NextFunction) {
 
 /**
  * Logout
- * @route /logout
+ * @path /logout
  * @method POST
  */
 export function logout(_: Request, res: Response, next: NextFunction) {

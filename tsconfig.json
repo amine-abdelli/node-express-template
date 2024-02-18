@@ -7,6 +7,10 @@
     "module": "CommonJS",
     "esModuleInterop": true,
     "baseUrl": ".",
+    "lib": [
+      "es2020",
+      "esnext"
+    ],
     "noImplicitAny": true,
     "skipLibCheck": true,
     "moduleResolution": "node",
@@ -14,6 +18,7 @@
     "paths": {}
   },
   "lib": ["es2020"],
+  "resolveJsonModule": true,
   "include": ["src/**/*", "socket", "custom.d.ts", "test"],
   "exclude": ["node_modules","**/*.spec.ts"]
 }
