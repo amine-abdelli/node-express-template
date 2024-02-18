@@ -1,7 +1,8 @@
 import Mailjet from 'node-mailjet';
+import { log } from 'src/log';
 
 /**
- * Here's the minimal setup to send emails using Mailjet.
+ * Here's the minimal setup to send emails for free using Mailjet.
  * Useful for account confirmation, reset password, welcoming users etc...
  * You'll need to create an account here https://app.mailjet.com/signup
  * Generate API and Secret keys and add them to your .env file
@@ -46,6 +47,6 @@ export async function sendWelcomeEmail(toEmail: string, toName: string) {
       ],
     });
   } catch (e) {
-    console.error(e);
+    log.error('Error while sending welcome email:', e);
   }
 }

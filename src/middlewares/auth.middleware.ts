@@ -2,7 +2,7 @@ import {
   Request, Response, NextFunction, RequestHandler,
 } from 'express';
 import jwt from 'jsonwebtoken';
-import { HttpError } from 'src/utils';
+import { HttpError } from 'src/errors';
 
 interface DecodedToken {
   userId: string;

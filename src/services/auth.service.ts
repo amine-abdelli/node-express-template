@@ -1,10 +1,11 @@
 import { Response } from 'express';
 import jwt from 'jsonwebtoken';
+import { HttpError, errorMessages } from 'src/errors';
 
 import { log } from 'src/log';
 import { UserModel } from 'src/model/user.model';
 import { getUserByEmailRepository, updateUserByIdRepository } from 'src/repositories';
-import { COOKIE_SETTINGS, HttpError, validatePassword } from 'src/utils';
+import { COOKIE_SETTINGS, validatePassword } from 'src/utils';
 
 const jwtConfig = {
   expiresIn: '7d',
@@ -17,7 +18,7 @@ export async function loginService(userCredentials: UserModel, res: Response) {
   log.info('Logging user : ', { email });
 
   if (!email || !password) {
-    throw new HttpError(400, 'Missing username, email or password');
+    throw new HttpError(400, errorMessages.MISSING_CREDENTIALS);
   }
 
   const user = await getUserByEmailRepository(email);
@@ -25,7 +26,7 @@ export async function loginService(userCredentials: UserModel, res: Response) {
   const isPasswordValid = await validatePassword(password, user?.password || '');
 
   if (!user || !isPasswordValid) {
-    throw new HttpError(401, 'Incorrect email or password');
+    throw new HttpError(401, errorMessages.INCORRECT_EMAIL_OR_PASSWORD);
   }
 
   const JWT_TOKEN_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
@@ -37,7 +38,7 @@ export async function loginService(userCredentials: UserModel, res: Response) {
   );
 
   if (!token) {
-    throw new HttpError(500, 'An error occurred while generating token');
+    throw new HttpError(500, errorMessages.TOKEN_GENERATION_ERROR);
   }
 
   await updateUserByIdRepository(user.id, { last_activity: new Date() });
