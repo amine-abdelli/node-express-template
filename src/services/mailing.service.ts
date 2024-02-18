@@ -1,4 +1,5 @@
 import Mailjet from 'node-mailjet';
+import { log } from 'src/log';
 
 /**
  * Here's the minimal setup to send emails for free using Mailjet.
@@ -46,6 +47,6 @@ export async function sendWelcomeEmail(toEmail: string, toName: string) {
       ],
     });
   } catch (e) {
-    console.error(e);
+    log.error('Error while sending welcome email:', e);
   }
 }

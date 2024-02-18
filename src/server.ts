@@ -9,9 +9,10 @@ import swaggerUI from 'swagger-ui-express';
 import { initSocket } from './sockets/socket-manager';
 import Routers from './routers';
 import { errorHandler } from './middlewares';
-import { HttpError } from './utils';
+
 import { log } from './log';
 import { swaggerOptions } from './utils/openapi.utils';
+import { HttpError } from './errors';
 
 const app = express();
 const server = http.createServer(app);

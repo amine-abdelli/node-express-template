@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
+import { HttpError } from 'src/errors';
 import { log } from 'src/log';
-import { HttpError } from 'src/utils';
 
 export function errorHandler(err: Error, _: Request, res: Response, next: NextFunction) {
   // default HTTP status code and error message
