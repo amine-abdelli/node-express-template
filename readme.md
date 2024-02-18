@@ -1,15 +1,16 @@
 TODO:
 - Stripe
 - Next Auth || SSO Google / Facebook / Apple
+- implement unit and integration tests : controllers, service, utils
+
+To describe:
+- SSO Facebook & Google
+- Minimal tests implementation
 - Firebase storage
-- Readme (precise to change mails in version.yml)
-- tests : controllers, service, utils
-- Fix ERROR MANAGEMENT (throwing errors crashes the service)
-- Fix ZOD validation on create user it fails
-DONE:
 - Mailing service
 - Minimal CI (version upgrade / lint / build / test)
 - How to run it
+- Controller / Service / Repository layers
 - Prisma : Database querying / Migrations
 - Logger
 - REST
