@@ -38,7 +38,7 @@ export async function createUserService(
     throw new HttpError(500, errorMessages.USER_CREATION_ERROR);
   }
 
-  // Send welcome email on user creations
+  // Send welcome email on user creation success
   await sendWelcomeEmail(createdUser.email, createdUser.email.split('@')[0]);
 
   log.info('User created successfully:', { email: createdUser.email });
