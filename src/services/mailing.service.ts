@@ -4,8 +4,18 @@ import { log } from 'src/log';
 /**
  * Here's the minimal setup to send emails for free using Mailjet.
  * Useful for account confirmation, reset password, welcoming users etc...
- * You'll need to create an account here https://app.mailjet.com/signup
- * Generate API and Secret keys and add them to your .env file
+ *
+ * Before utilizing this module, ensure you have performed the following setup steps:
+ *
+ * **Mailjet Account Setup**:
+ *   - Create a Mailjet account -> https://app.mailjet.com/signup.
+ *   - Navigate to the "API Keys" section in your Mailjet account and generate API and Secret keys.
+ *   - Populate a `.env` file in your project's root with these keys:
+ *  ```
+ *    MAILJET_API=YOUR_API_KEY
+ *    MAILJET_SECRET=YOUR_SECRET_KEY
+ *  ```
+ *
  * Refer to the official documentation for more details
  * @documentation https://github.com/mailjet/mailjet-apiv3-nodejs
  */

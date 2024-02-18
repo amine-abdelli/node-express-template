@@ -8,7 +8,7 @@ const router = express.Router();
  * @route /login
  * @method POST
  */
-export async function login(req: Request, res: Response, next: NextFunction) {
+export function login(req: Request, res: Response, next: NextFunction) {
   try {
     return loginService(req.body, res);
   } catch (error) {
@@ -21,7 +21,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
  * @route /logout
  * @method POST
  */
-export async function logout(_: Request, res: Response, next: NextFunction) {
+export function logout(_: Request, res: Response, next: NextFunction) {
   try {
     return logoutService(res);
   } catch (error) {
