@@ -13,7 +13,7 @@ export const validateSchema = (schema: AnyZodObject, part: 'body' | 'query' | 'p
   try {
     const toValidate = req[part];
     schema.parse(toValidate);
-    return next();
+    next();
   } catch (err: any) {
     const { errors } = err;
 
@@ -22,7 +22,7 @@ export const validateSchema = (schema: AnyZodObject, part: 'body' | 'query' | 'p
       message: error.message,
     }));
 
-    return res.status(400).json({
+    res.status(400).json({
       errors: detailedErrors,
     });
   }

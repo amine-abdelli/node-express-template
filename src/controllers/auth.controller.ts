@@ -8,11 +8,11 @@ const router = express.Router();
  * @path /login
  * @method POST
  */
-export function login(req: Request, res: Response, next: NextFunction) {
+export async function login(req: Request, res: Response, next: NextFunction) {
   try {
-    return loginService(req.body, res);
+    await loginService(req.body, res);
   } catch (error) {
-    return next(error);
+    next(error);
   }
 }
 
@@ -21,11 +21,11 @@ export function login(req: Request, res: Response, next: NextFunction) {
  * @path /logout
  * @method POST
  */
-export function logout(_: Request, res: Response, next: NextFunction) {
+export async function logout(_: Request, res: Response, next: NextFunction) {
   try {
-    return logoutService(res);
+    await logoutService(res);
   } catch (error) {
-    return next(error);
+    next(error);
   }
 }
 

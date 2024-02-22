@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import express from 'express';
-import { validateSchema } from 'src/utils/schema.utils';
+import { validateSchema } from 'src/middlewares/schema.middleware';
 import {
   CreateUserSchema, DeleteUserSchema, UpdatePasswordSchema, UpdateUserSchema,
 } from 'src/schemas';

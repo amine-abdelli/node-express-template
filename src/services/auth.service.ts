@@ -17,10 +17,6 @@ export async function loginService(userCredentials: UserModel, res: Response) {
 
   log.info('Logging user : ', { email });
 
-  if (!email || !password) {
-    throw new HttpError(400, errorMessages.MISSING_CREDENTIALS);
-  }
-
   const user = await getUserByEmailRepository(email);
 
   const isPasswordValid = await validatePassword(password, user?.password || '');

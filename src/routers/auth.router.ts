@@ -1,5 +1,5 @@
 import express from 'express';
-import { validateSchema } from 'src/utils/schema.utils';
+import { validateSchema } from 'src/middlewares/schema.middleware';
 import { LoginSchema } from 'src/schemas';
 import { withAuth } from 'src/middlewares/auth.middleware';
 import * as AuthController from 'src/controllers/auth.controller';
