@@ -1,12 +1,12 @@
 TODO:
+- Readme (precise to change mails in version.yml)
 - Stripe
+
+To put:
 - Next Auth || SSO Google / Facebook / Apple
 - Firebase storage
-- Readme (precise to change mails in version.yml)
-- tests : controllers, service, utils
-- Fix ERROR MANAGEMENT (throwing errors crashes the service)
-- Fix ZOD validation on create user it fails
-DONE:
+- Tests
+- Error management
 - Mailing service
 - Minimal CI (version upgrade / lint / build / test)
 - How to run it
@@ -14,6 +14,6 @@ DONE:
 - Logger
 - REST
 - OpenAPI - SWAGGER
-- ZOD
+- Input management ZOD
 - Socket
 - linter

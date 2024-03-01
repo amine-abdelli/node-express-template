@@ -51,10 +51,6 @@ export async function deleteUserService(req: Request) {
 
   log.info('Deleting user:', { userId: req.userId });
 
-  if (!password) {
-    throw new HttpError(400, errorMessages.EMAIL_OR_PASSWPRD_MISSING_PARAMETER);
-  }
-
   const userToDelete = await getUserByIdRepository(req.userId);
 
   if (!userToDelete) {
@@ -142,10 +138,6 @@ export async function updatePasswordService(req: Request) {
 
   if (!passwordPolicy.test(newPassword)) {
     throw new HttpError(400, errorMessages.PASSWORD_POLICY_VIOLATION);
-  }
-
-  if (!oldPassword || !newPassword) {
-    throw new HttpError(400, errorMessages.MISSING_OLD_OR_NEW_PASSWORD);
   }
 
   const user = await getUserByIdRepository(req.userId);
