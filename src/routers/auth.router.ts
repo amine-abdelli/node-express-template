@@ -70,4 +70,8 @@ router.post(endpoints.auth.login, validateSchema(LoginSchema), AuthController.lo
  */
 router.post(endpoints.auth.logout, ...withAuth(AuthController.logout));
 
+router.post('/oauth/login', AuthController.oauthLogin);
+
+router.get('/oauth/callback', AuthController.oauthCallback);
+
 export default router;
