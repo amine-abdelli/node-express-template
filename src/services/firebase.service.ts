@@ -64,6 +64,7 @@ export const storage = getStorage(app);
 
 export default app;
 
+// TODO: Replace this with your desired folder name
 const firebaseBucketFolderName = 'file-folder';
 
 /**
@@ -72,6 +73,7 @@ const firebaseBucketFolderName = 'file-folder';
  * to Firebase Storage.
  */
 export async function uploadLogFile() {
+  // TODO: Replace this with your desired file name
   const fileName = 'file-example.log';
   const filePath = path.resolve(__dirname, '../../file-example.log');
   const buffer = fs.readFileSync(filePath);

@@ -7,10 +7,22 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// This model is used to store the user's data
+// This model serves as an example and starting point for your database management.
+// Feel free to modify, remove, or add fields and models according to your application's needs.
+// For more information on data modeling with Prisma and postgresql, refer to the Prisma documentation:
+// https://www.prisma.io/docs/getting-started/quickstart
 model User {
   id                   String            @id @default(uuid())
   email                String            @unique
+  username             String            @unique
+  given_name           String?
+  family_name          String?
+  picture_url          String?
+  // Correspond to the sub field within the google user payload
+  google_id            String            @unique
   password             String
   last_activity        DateTime?
+  is_verified          Boolean           @default(false)
+  created_at           DateTime          @default(now())
+  updated_at           DateTime          @updatedAt
 }

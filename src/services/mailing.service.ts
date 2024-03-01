@@ -36,7 +36,7 @@ export async function sendWelcomeEmail(toEmail: string, toName: string) {
       Messages: [
         {
           From: {
-            Email: process.env.CONTACT_EMAIL,
+            Email: process.env.MAILJET_CONTACT_EMAIL,
             Name: 'Node express template',
           },
           To: [
@@ -50,7 +50,7 @@ export async function sendWelcomeEmail(toEmail: string, toName: string) {
           HTMLPart:
             `<h3>Hi ${toName},</h3>
              <p>Thanks for signing up</p>
-             <p>For any requirement please contact us at ${process.env.CONTACT_EMAIL || ''}.</p>
+             <p>For any requirement please contact us at ${process.env.MAILJET_CONTACT_EMAIL || ''}.</p>
              <img style="width: 150px;" src="https://assets.afcdn.com/recipe/20210702/121062_w1024h768c1cx924cy924cxt0cyt0cxb1848cyb1848.jpg" />
           `,
         },
