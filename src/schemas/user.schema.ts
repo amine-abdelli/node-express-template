@@ -46,5 +46,5 @@ export const UpdatePasswordSchema = z.object({
  * Schema for deleting a user.
  */
 export const DeleteUserSchema = z.object({
-  password: z.string().min(6, { message: 'Password too short - should be 6 characters minimum' }),
+  password: z.string(),
 });

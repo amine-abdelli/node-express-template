@@ -8,7 +8,7 @@ import {
   createUserRepository, getUserByEmailRepository, getUserByIdRepository, updateUserByIdRepository,
 } from 'src/repositories';
 import { LoginInput } from 'src/types/auth.types';
-import { COOKIE_SETTINGS, validatePassword } from 'src/utils';
+import { COOKIE_SETTINGS, initOAuthClient, validatePassword } from 'src/utils';
 
 const jwtConfig = {
   expiresIn: '7d',
@@ -47,7 +47,10 @@ export async function loginService(userCredentials: LoginInput, res: Response) {
 
   log.info('User successfully logged in : ', { email });
 
-  return res.status(200).cookie('session_id', token, COOKIE_SETTINGS).send({ message: 'User logged in !' });
+  return res
+    .status(200)
+    .cookie('session_id', token, COOKIE_SETTINGS)
+    .send({ message: 'User logged in !' });
 }
 
 /**
@@ -55,13 +58,17 @@ export async function loginService(userCredentials: LoginInput, res: Response) {
  */
 export function logoutService(res: Response) {
   log.info('Trying to logout user !');
-  res.clearCookie('session_id', COOKIE_SETTINGS).send({ message: 'User logged out !' });
+
+  res
+    .clearCookie('session_id', COOKIE_SETTINGS)
+    .send({ message: 'User logged out !' });
+
   log.info('User successfully logged out');
 }
 
 /**
-  * Login with OAuth
-  */
+ * Login with OAuth
+ */
 export function oauthLoginService(req: Request, res: Response) {
   log.info('Trying to login with OAuth !');
 
@@ -89,18 +96,13 @@ export function oauthLoginService(req: Request, res: Response) {
  * OAuth callback
  */
 export async function oauthCallBackService(req: Request, res: Response) {
-  log.info('oauth callback', req.query.code);
+  log.info('Trying to login with OAuth !');
 
-  const oAuth2Client = new OAuth2Client(
-    process.env.GOOGLE_CLIENT_ID,
-    process.env.GOOGLE_CLIENT_SECRET,
-    process.env.GOOGLE_REDIRECT_URI,
-  );
+  const oAuth2Client = await initOAuthClient();
 
   const { tokens } = await oAuth2Client.getToken(req.query.code as string);
-  oAuth2Client.setCredentials(tokens);
 
-  // console.log('credentials', credentials);
+  oAuth2Client.setCredentials(tokens);
 
   const ticket = await oAuth2Client.verifyIdToken({
     idToken: tokens.id_token as string,
@@ -108,17 +110,17 @@ export async function oauthCallBackService(req: Request, res: Response) {
   });
 
   /**
-    * Payload contains the user's information such as:
-    * - email
-    * - name
-    * - given_name
-    * - family_name
-    * - picture
-    * - sub
-    * - locale
-    * - iat
-    * - exp
-    */
+   * Payload contains the user's information such as:
+   * - email
+   * - name
+   * - given_name
+   * - family_name
+   * - picture
+   * - sub
+   * - locale
+   * - iat
+   * - exp
+   */
   const payload = ticket.getPayload();
 
   if (!payload) {
@@ -131,17 +133,25 @@ export async function oauthCallBackService(req: Request, res: Response) {
 
   const user = await getUserByIdRepository(sub);
 
+  // If user doesn't exist, check first that the email is available and create it
   if (!user && email) {
+    const isEmailtaken = await getUserByEmailRepository(email || '');
+
+    if (isEmailtaken) {
+      throw new HttpError(409, errorMessages.EMAIL_ALREADY_USED);
+    }
+
     await createUserRepository({
       id: sub,
       email,
       is_verified: email_verified,
       picture_url: picture,
       username: name,
-      password: '',
+      password: '', // No password required for OAuth users
     });
   }
 
+  // If user already exists, update its information and log him in
   await updateUserByIdRepository(
     sub,
     {
@@ -152,5 +162,10 @@ export async function oauthCallBackService(req: Request, res: Response) {
     },
   );
 
-  res.status(200).cookie('session_id', tokens.id_token, COOKIE_SETTINGS).send({ message: 'User logged in !' });
+  res
+    .status(200)
+    // Will set the cookie in the browser
+    // Add { credentials: 'include' } in evert fetch request that require authentication
+    .cookie('session_id', tokens.id_token, COOKIE_SETTINGS)
+    .redirect(process.env.WEB_FRONTEND_URL || 'http://localhost:3000');
 }

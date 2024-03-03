@@ -12,7 +12,7 @@ export function loggerMiddleware(req: Request, res: Response, next: NextFunction
 
   res.on('finish', () => {
     const duration = Date.now() - start;
-    log.info(`${req.method} ${req.originalUrl} ${res.statusCode} - ${duration}ms - user : ${req?.userId || ''}`);
+    log.info(`${req.method} ${req.originalUrl} ${res.statusCode} - ${duration}ms - user : ${req?.userId || 'un-authenticated user'}`);
   });
 
   next();

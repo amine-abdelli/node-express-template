@@ -4,7 +4,7 @@ import {
 } from 'express';
 import jwt from 'jsonwebtoken';
 import { HttpError } from 'src/errors';
-import { verifyOauthIdToken } from 'src/utils';
+import { verifyOAuthIdToken } from 'src/utils';
 
 interface DecodedToken {
   userId: string;
@@ -28,6 +28,7 @@ interface DecodedToken {
  */
 function authMiddleware(req: Request, res: Response, next: NextFunction) {
   const authHeader = req.headers.cookie;
+
   const token = authHeader && authHeader.split('=')[1];
 
   if (!token) {
@@ -43,7 +44,7 @@ function authMiddleware(req: Request, res: Response, next: NextFunction) {
     }
 
     // If JWT verification fails, attempt to verify as a Google OAuth token
-    verifyOauthIdToken(token).then((userId) => {
+    verifyOAuthIdToken(token).then((userId) => {
       if (userId) {
         req.userId = userId;
         return next();

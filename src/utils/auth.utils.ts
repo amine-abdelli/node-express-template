@@ -28,18 +28,26 @@ export const COOKIE_SETTINGS: CookieOptions = {
   secure: true,
 };
 
-export async function verifyOauthIdToken(token: string): Promise<string> {
-  try {
-    const oAuth2Client = new OAuth2Client(
-      process.env.GOOGLE_CLIENT_ID,
-      process.env.GOOGLE_CLIENT_SECRET,
-      process.env.GOOGLE_REDIRECT_URI,
-    );
+export async function initOAuthClient() {
+  return new OAuth2Client(
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
+    process.env.GOOGLE_REDIRECT_URI,
+  );
+}
 
-    const ticket = await oAuth2Client.verifyIdToken({
-      idToken: token,
-      audience: process.env.GOOGLE_CLIENT_ID,
-    });
+export async function verifyIdToken(id_token: string) {
+  const oAuth2Client = await initOAuthClient();
+
+  return oAuth2Client.verifyIdToken({
+    idToken: id_token as string,
+    audience: process.env.GOOGLE_CLIENT_ID,
+  });
+}
+
+export async function verifyOAuthIdToken(token: string): Promise<string> {
+  try {
+    const ticket = await verifyIdToken(token);
 
     const payload = ticket.getPayload();
 
