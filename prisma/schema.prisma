@@ -18,8 +18,6 @@ model User {
   given_name           String?
   family_name          String?
   picture_url          String?
-  // Correspond to the sub field within the google user payload
-  google_id            String            @unique
   password             String
   last_activity        DateTime?
   is_verified          Boolean           @default(false)

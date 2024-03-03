@@ -1,8 +1,10 @@
+/* eslint-disable consistent-return */
 import {
   Request, Response, NextFunction, RequestHandler,
 } from 'express';
 import jwt from 'jsonwebtoken';
 import { HttpError } from 'src/errors';
+import { verifyOauthIdToken } from 'src/utils';
 
 interface DecodedToken {
   userId: string;
@@ -11,24 +13,32 @@ interface DecodedToken {
 }
 
 function authMiddleware(req: Request, res: Response, next: NextFunction) {
-  // Get the Bearer token from the request header
   const authHeader = req.headers.cookie;
   const token = authHeader && authHeader.split('=')[1];
+
   if (!token) {
     return res.status(200).json({ message: 'Unauthorized' });
   }
+
   const JWT_TOKEN_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 
-  // Verify and decode the Bearer token
-  jwt.verify(token, JWT_TOKEN_SECRET, (err, decodedToken) => {
-    if (err) throw new HttpError(403, 'Invalid or expired token');
-    // Extract the userId from the decoded token and attach it to the request object
-    req.userId = (decodedToken as DecodedToken).userId;
-    return next();
-  });
+  jwt.verify(token, JWT_TOKEN_SECRET, (jwtErr, decodedToken) => {
+    if (!jwtErr && decodedToken) {
+      req.userId = (decodedToken as DecodedToken).userId;
+      return next();
+    }
 
-  return null;
+    // If JWT verification fails, attempt to verify as a Google OAuth token
+    verifyOauthIdToken(token).then((userId) => {
+      if (userId) {
+        req.userId = userId;
+        return next();
+      }
+      throw new HttpError(403, 'Invalid or expired token');
+    });
+  });
 }
+
 /**
  * A helper function to attach the authMiddleware to a request handler
  * This is useful when you want to protect a route with authentication

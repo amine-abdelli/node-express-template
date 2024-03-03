@@ -14,4 +14,5 @@ export const errorMessages = {
   MISSING_CREDENTIALS: 'Missing username, email or password',
   INCORRECT_EMAIL_OR_PASSWORD: 'Incorrect email or password',
   TOKEN_GENERATION_ERROR: 'An error occurred while generating token',
+  OAUTH_PAYLOAD_ERROR: "Couldn't retrieve user's information from Google",
 };
