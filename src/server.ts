@@ -42,6 +42,7 @@ const corsOptions = {
 /**
  * This is a very basic rate limiter to avoid extreme attack usecases
  * but you can setup a rate limit depending on query complexity
+ * @see https://www.npmjs.com/package/express-rate-limit
  */
 const limiter = rateLimit({
   windowMs: 10 * 1000, // ten seconds in milliseconds
