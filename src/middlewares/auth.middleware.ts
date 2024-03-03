@@ -4,7 +4,7 @@ import {
 } from 'express';
 import jwt from 'jsonwebtoken';
 import { HttpError } from 'src/errors';
-import { verifyOAuthIdToken } from 'src/utils';
+import { getUserIdFromOAuthIdToken } from 'src/utils';
 
 interface DecodedToken {
   userId: string;
@@ -44,7 +44,7 @@ function authMiddleware(req: Request, res: Response, next: NextFunction) {
     }
 
     // If JWT verification fails, attempt to verify as a Google OAuth token
-    verifyOAuthIdToken(token).then((userId) => {
+    getUserIdFromOAuthIdToken(token).then((userId) => {
       if (userId) {
         req.userId = userId;
         return next();

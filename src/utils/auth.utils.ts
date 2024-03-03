@@ -45,7 +45,7 @@ export async function verifyIdToken(id_token: string) {
   });
 }
 
-export async function verifyOAuthIdToken(token: string): Promise<string> {
+export async function getUserIdFromOAuthIdToken(token: string): Promise<string> {
   try {
     const ticket = await verifyIdToken(token);
 
