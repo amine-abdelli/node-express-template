@@ -1,20 +1,17 @@
-TODO:
-- Readme (precise to change mails in version.yml)
-<!-- - Stripe -->
-
-To put:
-- Authentication
-- SSO Google / Apple
-- Firebase storage
-- Tests
-- Error management
-- Mailing service
-- Minimal CI (version upgrade / lint / build / test)
-- How to run it
-- Prisma : Database querying / Migrations
-- Logger
-- REST
-- OpenAPI - SWAGGER
-- Input management ZOD
-- Socket
+Fill readme to describe the following:
+- How to run app
+- .env
 - linter
+- Schema validation with ZOD
+- REST API
+- Logger
+- JWT Authentication 
+- GOOGLE SSO with OAuth authentication
+- Prisma : Database querying / Migrations
+- Error management
+- Minimal CI (version upgrade / lint / build / test)
+- Firebase storage
+- Mailing service
+- Tests
+- OpenAPI - SWAGGER
+- Socket

@@ -12,6 +12,7 @@ const router = express.Router();
  * Create a user and its related default settings and palmares
  * @path /user/create
  * @method POST
+ * @public route
  */
 export async function createOneUser(req: Request, res: Response, next: NextFunction) {
   try {
@@ -26,6 +27,7 @@ export async function createOneUser(req: Request, res: Response, next: NextFunct
  * Update one user
  * @path /user/update
  * @method PUT
+ * @protected with authentication
  */
 export async function updateOneUser(req: Request, res: Response, next: NextFunction) {
   try {
@@ -40,6 +42,7 @@ export async function updateOneUser(req: Request, res: Response, next: NextFunct
  * Get user's data
  * @path /user/me
  * @method GET
+ * @protected with authentication
  */
 export async function getOneUser(req: Request, res: Response, next: NextFunction) {
   try {
@@ -54,6 +57,7 @@ export async function getOneUser(req: Request, res: Response, next: NextFunction
  * Delete user and its related settings and palmares
  * @path /user/delete
  * @method DELETE
+ * @protected with authentication
  */
 export async function deleteOneUser(req: Request, res: Response, next: NextFunction) {
   try {
@@ -68,6 +72,7 @@ export async function deleteOneUser(req: Request, res: Response, next: NextFunct
  * Update user's password
  * @path /user/update-password
  * @method PUT
+ * @protected with authentication
  */
 export async function updateUserPassword(req: Request, res: Response, next: NextFunction) {
   try {

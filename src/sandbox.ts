@@ -2,7 +2,7 @@
 
 /**
  * This is a sandbox file to test the prisma client or any other code you want to test in isolation.
- * get any data from your database, manipulate it and log it to the console for exampleo or simply
+ * get any data from your database, manipulate it and log it to the console for example or simply
  * test a function or algorithms.
  * Execute it by running `yarn prisma:sandbox` in your terminal.
  */

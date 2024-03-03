@@ -16,5 +16,9 @@ export const endpoints = Object.freeze({
     login: '/login',
     logout: '/logout',
   },
+  oauth: {
+    login: '/oauth/login',
+    callback: '/oauth/callback',
+  },
   ping: '/',
 });

@@ -9,6 +9,7 @@ const router = express.Router();
  * Login
  * @path /login
  * @method POST
+ * @public route
  */
 export async function login(req: Request, res: Response, next: NextFunction) {
   try {
@@ -22,6 +23,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
  * Logout
  * @path /logout
  * @method POST
+ * @protected with authentication
  */
 export async function logout(_: Request, res: Response, next: NextFunction) {
   try {
@@ -35,6 +37,7 @@ export async function logout(_: Request, res: Response, next: NextFunction) {
  * OAuth login
  * @path /oauth/login
  * @method POST
+ * @public route
  */
 export async function oauthLogin(req: Request, res: Response, next: NextFunction) {
   try {
@@ -48,6 +51,7 @@ export async function oauthLogin(req: Request, res: Response, next: NextFunction
  * OAuth callback
  * @path /oauth/callback
  * @method GET
+ * @public route
  */
 export async function oauthCallback(req: Request, res: Response, next: NextFunction) {
   try {

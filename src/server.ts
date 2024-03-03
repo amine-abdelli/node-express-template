@@ -67,7 +67,8 @@ app.use(loggerMiddleware);
 app.use(limiter);
 
 /**
- * Routers
+ * Routers - Entry points for all routes / controllers
+ * @see https://expressjs.com/en/guide/routing.html
  */
 Routers.map(({ route, router }) => app.use(route, router));
 
