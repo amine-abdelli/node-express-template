@@ -1,9 +1,10 @@
 TODO:
 - Readme (precise to change mails in version.yml)
-- Stripe
+<!-- - Stripe -->
 
 To put:
-- Next Auth || SSO Google / Facebook / Apple
+- Authentication
+- SSO Google / Apple
 - Firebase storage
 - Tests
 - Error management
