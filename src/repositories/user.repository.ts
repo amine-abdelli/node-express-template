@@ -1,18 +1,15 @@
 import { User } from '@prisma/client';
 
-import { UserModel } from 'src/model';
 import { prisma } from 'src/client';
+import { CreateUserRequest, UpdateUserRequest } from 'src/types';
 
 /**
  * Create one user
- * @param data UserModel
+ * @param data CreateUserRequest
  */
-export function createUserRepository(data: UserModel): Promise<User> {
+export function createUserRepository(data: CreateUserRequest): Promise<User> {
   return prisma.user.create({
-    data: {
-      email: data.email,
-      password: data.password,
-    },
+    data,
   });
 }
 
@@ -56,11 +53,14 @@ export function getUserByEmailRepository(email: string): Promise<User | null> {
  * @param data Partial<User>
  * @returns An updated user
  */
-export function updateUserByIdRepository(userId: string, data: Partial<User>) {
+export function updateUserByIdRepository(userId: string, data: UpdateUserRequest): Promise<User> {
   return prisma.user.update({
     where: {
       id: userId,
     },
-    data,
+    data: {
+      ...data,
+      updated_at: new Date(),
+    },
   });
 }

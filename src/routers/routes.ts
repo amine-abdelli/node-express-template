@@ -16,5 +16,5 @@ export const endpoints = Object.freeze({
     login: '/login',
     logout: '/logout',
   },
-  ping: '/ping',
+  ping: '/',
 });

@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import express, { Request, Response, NextFunction } from 'express';
 import { omit } from 'lodash';
-
 import {
-  createUserService, deleteUserService, getUserByIdService,
-  updatePasswordService, updateUserByIdService,
+  createUserService, deleteUserService, getUserByIdService, updatePasswordService,
+  updateUserByIdService,
 } from 'src/services';
 
 const router = express.Router();

@@ -12,6 +12,20 @@ interface DecodedToken {
   exp: number;
 }
 
+/**
+ * Middleware function to authenticate requests.
+ * It checks for a valid token in the request headers and verifies it using JWT.
+ * If the token is valid, it sets the userId in the request object and calls the next middleware.
+ * If the token is invalid or missing, it returns an "Unauthorized" response.
+ * If the JWT verification fails, it attempts to verify the token as a Google OAuth token.
+ * If the Google OAuth verification succeeds, it sets the userId in the request object and calls
+ * the next middleware.
+ * If the Google OAuth verification fails, it throws an HttpError with status code 403.
+ *
+ * @param req - The Express request object.
+ * @param res - The Express response object.
+ * @param next - The next middleware function.
+ */
 function authMiddleware(req: Request, res: Response, next: NextFunction) {
   const authHeader = req.headers.cookie;
   const token = authHeader && authHeader.split('=')[1];
@@ -35,6 +49,8 @@ function authMiddleware(req: Request, res: Response, next: NextFunction) {
         return next();
       }
       throw new HttpError(403, 'Invalid or expired token');
+    }).catch((err) => {
+      next(err);
     });
   });
 }

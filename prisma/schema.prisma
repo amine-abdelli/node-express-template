@@ -14,13 +14,11 @@ datasource db {
 model User {
   id                   String            @id @default(uuid())
   email                String            @unique
-  username             String            @unique
-  given_name           String?
-  family_name          String?
-  picture_url          String?
   password             String
+  username             String?           @unique
+  picture_url          String?
   last_activity        DateTime?
-  is_verified          Boolean           @default(false)
+  is_verified          Boolean?          @default(false)
   created_at           DateTime          @default(now())
   updated_at           DateTime          @updatedAt
 }

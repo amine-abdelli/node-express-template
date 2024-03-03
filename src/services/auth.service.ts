@@ -4,8 +4,10 @@ import jwt from 'jsonwebtoken';
 import { HttpError, errorMessages } from 'src/errors';
 
 import { log } from 'src/log';
-import { UserModel } from 'src/model/user.model';
-import { getUserByEmailRepository, getUserByIdRepository, updateUserByIdRepository } from 'src/repositories';
+import {
+  createUserRepository, getUserByEmailRepository, getUserByIdRepository, updateUserByIdRepository,
+} from 'src/repositories';
+import { LoginInput } from 'src/types/auth.types';
 import { COOKIE_SETTINGS, validatePassword } from 'src/utils';
 
 const jwtConfig = {
@@ -13,7 +15,10 @@ const jwtConfig = {
   algorithm: 'HS512',
 } as jwt.SignOptions;
 
-export async function loginService(userCredentials: UserModel, res: Response) {
+/**
+ * Login a user
+ */
+export async function loginService(userCredentials: LoginInput, res: Response) {
   const { email, password } = userCredentials;
 
   log.info('Logging user : ', { email });
@@ -45,12 +50,18 @@ export async function loginService(userCredentials: UserModel, res: Response) {
   return res.status(200).cookie('session_id', token, COOKIE_SETTINGS).send({ message: 'User logged in !' });
 }
 
+/**
+ * Logout a user
+ */
 export function logoutService(res: Response) {
   log.info('Trying to logout user !');
   res.clearCookie('session_id', COOKIE_SETTINGS).send({ message: 'User logged out !' });
   log.info('User successfully logged out');
 }
 
+/**
+  * Login with OAuth
+  */
 export function oauthLoginService(req: Request, res: Response) {
   log.info('Trying to login with OAuth !');
 
@@ -66,8 +77,7 @@ export function oauthLoginService(req: Request, res: Response) {
   );
 
   const authorizeUrl = oAuth2Client.generateAuthUrl({
-    // TODO: Should be different for production
-    access_type: 'offline',
+    access_type: 'offline', // TODO: Should be different for production
     scope: ['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email'],
     prompt: 'consent',
   });
@@ -75,6 +85,9 @@ export function oauthLoginService(req: Request, res: Response) {
   res.json({ url: authorizeUrl });
 }
 
+/**
+ * OAuth callback
+ */
 export async function oauthCallBackService(req: Request, res: Response) {
   log.info('oauth callback', req.query.code);
 
@@ -87,7 +100,6 @@ export async function oauthCallBackService(req: Request, res: Response) {
   const { tokens } = await oAuth2Client.getToken(req.query.code as string);
   oAuth2Client.setCredentials(tokens);
 
-  // const { credentials } = oAuth2Client;
   // console.log('credentials', credentials);
 
   const ticket = await oAuth2Client.verifyIdToken({
@@ -96,42 +108,47 @@ export async function oauthCallBackService(req: Request, res: Response) {
   });
 
   /**
-   * Payload contains the user's information such as:
-   * - email
-   * - name
-   * - given_name
-   * - family_name
-   * - picture
-   * - sub
-   * - locale
-   * - iat
-   * - exp
-   */
+    * Payload contains the user's information such as:
+    * - email
+    * - name
+    * - given_name
+    * - family_name
+    * - picture
+    * - sub
+    * - locale
+    * - iat
+    * - exp
+    */
   const payload = ticket.getPayload();
 
   if (!payload) {
     throw new HttpError(500, errorMessages.OAUTH_PAYLOAD_ERROR);
   }
+
   const {
-    email, name, given_name, family_name, picture, sub, email_verified,
+    email, name, picture, sub, email_verified,
   } = payload;
 
   const user = await getUserByIdRepository(sub);
 
-  if (!user) {
-    throw new HttpError(404, errorMessages.USER_NOT_FOUND);
+  if (!user && email) {
+    await createUserRepository({
+      id: sub,
+      email,
+      is_verified: email_verified,
+      picture_url: picture,
+      username: name,
+      password: '',
+    });
   }
 
   await updateUserByIdRepository(
     sub,
     {
-      email,
       is_verified: email_verified,
       last_activity: new Date(),
       picture_url: picture,
       username: name,
-      given_name,
-      family_name,
     },
   );
 

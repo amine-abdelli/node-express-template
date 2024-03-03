@@ -8,7 +8,7 @@ import swaggerUI from 'swagger-ui-express';
 
 import { initSocket } from './sockets/socket-manager';
 import Routers from './routers';
-import { errorHandler } from './middlewares';
+import { errorHandler, loggerMiddleware } from './middlewares';
 
 import { log } from './log';
 import { swaggerOptions } from './utils/openapi.utils';
@@ -51,14 +51,19 @@ const limiter = rateLimit({
 });
 
 /**
- * Apply rate limiter to all requests
- */
-app.use(limiter);
-
-/**
  * Allow CORS
  */
 app.use(cors(corsOptions));
+
+/**
+ * Logger middleware
+ */
+app.use(loggerMiddleware);
+
+/**
+ * Apply rate limiter to all requests
+ */
+app.use(limiter);
 
 /**
  * Routers
